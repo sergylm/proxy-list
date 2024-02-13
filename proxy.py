@@ -25,8 +25,22 @@ def get_geonode(protocols, nProxy):
     append_proxies(proxies["data"], file)
     pass
 
+def get_proxyscape(protocols):
+    if "https" in protocols:
+        protocols.remove("https")
+    if protocols is []:
+        print("Proxyscape only supply HTTP, SOCKS4 and SOCKS5 proxies. Not HTTPS")
+        return
+    url = "https://api.proxyscrape.com/v3/free-proxy-list/get?request=getproxies&protocol={}&timeout=15000&proxy_format=ipport&format=json".format(",".join(protocols))
+    proxies = get_response(url)
+    append_proxies(proxies["proxies"], "proxyscrape_list.txt")
+    # print(proxies["proxies"])
+
+    pass
+
 
 if __name__ == '__main__':
     protocols = ["http", "https", "socks4", "socks5"]
     nProxy = 1436
-    get_geonode(protocols, nProxy)
+    # get_geonode(protocols, nProxy)
+    get_proxyscape(protocols)
