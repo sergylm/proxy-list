@@ -10,23 +10,23 @@ def get_response(url):
     res = requests.get(url)
     return json.loads(res.content)
 
-def get_geonode(params, nProxy = 100):
+def get_geonode(protocols, nProxy):
     page = 1
     file = "proxy_list.txt"
     while nProxy > 500:
-        url = "https://proxylist.geonode.com/api/proxy-list?protocols={}&limit=500&page={}&sort_by=lastChecked&sort_type=desc".format("%2C".join(x.lower() for x in params), page)
+        url = "https://proxylist.geonode.com/api/proxy-list?protocols={}&limit=500&page={}&sort_by=lastChecked&sort_type=desc".format("%2C".join(protocols), page)
         proxies = get_response(url)
         append_proxies(proxies["data"], file)
         nProxy -= 500
         page += 1
     
-    url = "https://proxylist.geonode.com/api/proxy-list?protocols={}&limit={}&page={}&sort_by=lastChecked&sort_type=desc".format("%2C".join(x.lower() for x in params), nProxy, page)
+    url = "https://proxylist.geonode.com/api/proxy-list?protocols=&limit={}&page={}&sort_by=lastChecked&sort_type=desc".format("%2C".join(protocols), nProxy, page)
     proxies = get_response(url)
     append_proxies(proxies["data"], file)
     pass
 
 
 if __name__ == '__main__':
-    params = ["HTTPS", "HTTPS", "SOCKS4", "SOCKS5"]
+    protocols = ["http", "https", "socks4", "socks5"]
     nProxy = 1436
-    get_geonode(params, nProxy)
+    get_geonode(protocols, nProxy)
