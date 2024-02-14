@@ -23,7 +23,6 @@ def get_geonode(protocols, nProxy):
     url = "https://proxylist.geonode.com/api/proxy-list?protocols=&limit={}&page={}&sort_by=lastChecked&sort_type=desc".format("%2C".join(protocols), nProxy, page)
     proxies = get_response(url)
     append_proxies(proxies["data"], file)
-    pass
 
 def get_proxyscape(protocols):
     if "https" in protocols:
@@ -36,11 +35,31 @@ def get_proxyscape(protocols):
     append_proxies(proxies["proxies"], "proxyscrape_list.txt")
     # print(proxies["proxies"])
 
-    pass
+def get_free_proxy(protocols):
+    if "socks4" in protocols or "socks5" in protocols:
+        print("free-proxy-list only sypply HTTP an HTTPS")
+        
+    url = "https://free-proxy-list.net/"
+    res = requests.get(url)
+    proxies = parse_free_proxy(res.text)
+
+    append_proxies(proxies, "free_proxy.txt")
+
+def parse_free_proxy(res):
+    proxies = []
+    res = res.split('onclick="select(this)">')[1]
+    res = res.split('</textarea>')[0]
+    res = res.split("\n")[3:-1]
+    for x in res:
+        ip, port = x.split(":")
+        proxies.append({"ip" : ip, "port" : port})
+    return proxies
+    
 
 
 if __name__ == '__main__':
     protocols = ["http", "https", "socks4", "socks5"]
     nProxy = 1436
     # get_geonode(protocols, nProxy)
-    get_proxyscape(protocols)
+    # get_proxyscape(protocols)
+    get_free_proxy(protocols)
