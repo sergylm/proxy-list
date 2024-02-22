@@ -1,6 +1,9 @@
 import requests
 import json
 
+import argparse
+from argparse import RawTextHelpFormatter
+
 def append_proxies(proxies, file):
     with open(file, "a") as f:
         for p in proxies:
@@ -58,8 +61,16 @@ def parse_free_proxy(res):
 
 
 if __name__ == '__main__':
-    protocols = ["http", "https", "socks4", "socks5"]
-    nProxy = 1436
-    # get_geonode(protocols, nProxy)
-    # get_proxyscape(protocols)
-    get_free_proxy(protocols)
+    parser = argparse.ArgumentParser(description='Gather proxies from several providers.\nSelect type proxy within http, https, socks4 and socks5.\nSpecify number of proxies.',
+    epilog= "Examples:\n\
+    Gather only socks4 and socks5 proxies:\n\
+        proxy.py --type socks4 socks4\n\
+    Gather 10 proxies\n\
+        proxy.py -n 10\n\
+    Gather 15 proxies of type socks5\n\
+        proxy.py -n --type socks5", formatter_class=RawTextHelpFormatter)
+    parser.add_argument('--type' , nargs='*', metavar="TYPE", help='Specify proxy type separate by commas. (Default: http https).', choices=['http', 'https', 'socks4', 'socks5'], default=['http','https'], dest='type')
+    parser.add_argument('--list', help='Display list of available providers.', dest='list', action='store_false')
+    parser.add_argument('-n', type=int, metavar="N", help='Number of proxies gather. (Default: 1).', default=1)
+    args = parser.parse_args()
+   
