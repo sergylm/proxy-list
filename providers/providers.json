@@ -1,0 +1,16 @@
+{
+    "providers": [
+        {
+            "name": "geonode",
+            "url": "https://geonode.com/free-proxy-list"
+        },
+        {
+            "name": "ProxyScrape",
+            "url": "https://proxyscrape.com/free-proxy-list"
+        },
+        {
+            "name": "Free Proxy List",
+            "url": "https://free-proxy-list.net/"
+        }
+    ]
+}
